@@ -263,6 +263,7 @@ function Base.show(io::IO, ::MIME"text/plain", vec::AbstractVec)
 end
 
 VecSeq(X::Vector{T}; kwargs...) where {T} = VecSeq(MPI.COMM_SELF, X; kwargs...)
+VecSeq(X::PETSc.VecSeq{T}) where {T} = X
 AbstractVec(X::AbstractVector) = VecSeq(X)
 
 

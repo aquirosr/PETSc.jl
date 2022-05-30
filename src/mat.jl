@@ -190,7 +190,7 @@ function MatSetValuesStencil! end
 
 
     function MatSetNullSpace!(
-        mat::Mat{$PetscScalar},
+        mat::AbstractMat{$PetscScalar},
         nullspace::MatNullSpace{$PetscScalar},
     )
         @chk ccall(

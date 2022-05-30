@@ -89,7 +89,7 @@ struct Fn_KSPComputeOperators{T} end
         return nothing
     end
 
-    function setoperators!(ksp::KSP{$PetscScalar}, A::AbstractMat{$PetscScalar}, P::AbstractMat{$PetscScalar})
+    function setoperators!(ksp::KSP{$PetscScalar}, A::AbstractMat{$PetscScalar}, P::AbstractMat{$PetscScalar}=A)
         @chk ccall((:KSPSetOperators, $libpetsc), PetscErrorCode, (CKSP, CMat, CMat), ksp, A, P)
         ksp._A = A
         ksp._P = P
@@ -196,12 +196,12 @@ struct Fn_KSPComputeOperators{T} end
         return unsafe_string(t_r[])
     end
 
-    function iters(ksp::KSP{$PetscScalar})
-        r_its = Ref{$PetscInt}()
-        @chk ccall((:KSPGetIterationNumber, $libpetsc), PetscErrorCode, 
-        (KSP, Ptr{$PetscInt}), ksp, r_its)
-        return r_its[]
-    end
+    # function iters(ksp::KSP{$PetscScalar})
+    #     r_its = Ref{$PetscInt}()
+    #     @chk ccall((:KSPGetIterationNumber, $libpetsc), PetscErrorCode, 
+    #     (KSP, Ptr{$PetscInt}), ksp, r_its)
+    #     return r_its[]
+    # end
 
     function view(ksp::KSP{$PetscScalar}, viewer::AbstractViewer{$PetscLib}=ViewerStdout($petsclib, getcomm(ksp)))
         @chk ccall((:KSPView, $libpetsc), PetscErrorCode, 
@@ -210,12 +210,12 @@ struct Fn_KSPComputeOperators{T} end
         return nothing
     end
 
-    function resnorm(ksp::KSP{$PetscScalar})
-        r_rnorm = Ref{$PetscReal}()
-        @chk ccall((:KSPGetResidualNorm, $libpetsc), PetscErrorCode, 
-        (KSP, Ptr{$PetscReal}), ksp, r_rnorm)
-        return r_rnorm[]
-    end
+    # function resnorm(ksp::KSP{$PetscScalar})
+    #     r_rnorm = Ref{$PetscReal}()
+    #     @chk ccall((:KSPGetResidualNorm, $libpetsc), PetscErrorCode, 
+    #     (KSP, Ptr{$PetscReal}), ksp, r_rnorm)
+    #     return r_rnorm[]
+    # end
 
     function solve!(x::AbstractVec{$PetscScalar}, ksp::KSP{$PetscScalar}, b::AbstractVec{$PetscScalar})
         with(ksp.opts) do
@@ -299,7 +299,7 @@ Gets the current iteration number; if the `solve!` is complete, returns the numb
 # External Links
 $(_doc_external("KSP/KSPGetIterationNumber"))
 """
-iters
+# iters
 
 
 """
@@ -310,5 +310,5 @@ Gets the last (approximate preconditioned) residual norm that has been computed.
 # External Links
 $(_doc_external("KSP/KSPGetResidualNorm"))
 """
-resnorm
+# resnorm
 
