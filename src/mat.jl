@@ -434,7 +434,7 @@ function Base.copyto!(M::PETSc.MatSeqAIJ{T}, S::SparseMatrixCSC{T}) where {T}
     assemble(M);  
 end
 
-function MatSeqAIJ(S::SparseMatrixCSR{T}) where {T}
+function MatSeqAIJ(S::SparseMatrixCSR{B,T,N}) where {B,T,N}
     PetscInt = inttype(T)
     m,n = size(S)
     nnz = zeros(PetscInt,m)
@@ -452,7 +452,7 @@ function MatSeqAIJ(S::SparseMatrixCSR{T}) where {T}
     return M
 end
 
-function Base.copyto!(M::PETSc.MatSeqAIJ{T}, S::SparseMatrixCSR{T}) where {T}
+function Base.copyto!(M::PETSc.MatSeqAIJ{T}, S::SparseMatrixCSR{1,T,N}) where {T,N}
     for i = 1:size(S,1)
         for jj = S.rowptr[i]:S.rowptr[i+1]-1
             j = S.rowval[jj]
