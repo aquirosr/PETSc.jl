@@ -1,6 +1,6 @@
 module PETSc
 
-using MPI, LinearAlgebra, SparseArrays
+using MPI, LinearAlgebra, SparseArrays, SparseMatricesCSR
 
 MPI.Initialized() || MPI.Init()
 

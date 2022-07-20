@@ -434,6 +434,34 @@ function Base.copyto!(M::PETSc.MatSeqAIJ{T}, S::SparseMatrixCSC{T}) where {T}
     assemble(M);  
 end
 
+function MatSeqAIJ(S::SparseMatrixCSR{T}) where {T}
+    PetscInt = inttype(T)
+    m,n = size(S)
+    nnz = zeros(PetscInt,m)
+    for r = 1:m
+        nnz[r] = length(nzrange(S,r))
+    end
+    M = MatSeqAIJ{T}(m, n, nnz)
+    for i = 1:m
+        for jj = S.rowptr[i]:S.rowptr[i+1]-1
+            j = S.colval[jj]
+            M[i,j] = S.nzval[jj]
+        end
+    end
+    assemble(M)
+    return M
+end
+
+function Base.copyto!(M::PETSc.MatSeqAIJ{T}, S::SparseMatrixCSR{T}) where {T}
+    for i = 1:size(S,1)
+        for jj = S.rowptr[i]:S.rowptr[i+1]-1
+            j = S.rowval[jj]
+            M[i,j] = S.nzval[jj]
+        end
+    end
+    assemble(M);  
+end
+
 function Base.show(io::IO, ::MIME"text/plain", mat::AbstractMat)
     _show(io, mat)
 end
